@@ -26,7 +26,7 @@ if G.expected_chips ~= -1 and G.expected_chips ~= nil and G.hand ~= nil and G.ha
         end
         expected_chips_text = chips_text_indicator..": "..expected_chips_text
     else
-        expected_chips_text = chips_text_indicator.."Expected Chips: ???"
+        expected_chips_text = chips_text_indicator..": ???"
     end
     local expected_chips_text = love.graphics.newText(G.expected_chips_font, {{255, 0, 255}, expected_chips_text})
     love.graphics.draw(expected_chips_text, 120, 20)

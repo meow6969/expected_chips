@@ -1076,7 +1076,7 @@ function Card:calculate_joker_chips(context)
                                 mult_mod = self.ability.mult
                             }
                         end
-                        if self.ability.name == 'Card Sharp' and G.GAME.hands[context.scoring_name] and G.GAME.hands[context.scoring_name].played_this_round > 1 then
+                        if self.ability.name == 'Card Sharp' and G.GAME.hands[context.scoring_name] and (G.GAME.hands[context.scoring_name].played_this_round > 1 or (G.GAME.hands[context.scoring_name].played_this_round == 1 and context.chip_calculation == true)) then
                             return {
                                 message = localize{type='variable',key='a_xmult',vars={self.ability.extra.Xmult}},
                                 Xmult_mod = self.ability.extra.Xmult,

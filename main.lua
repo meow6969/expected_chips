@@ -7,6 +7,13 @@ exp_chips.save_config = function(self)
 --     sendDebugMessage("exp_chips.num_calculations: "..exp_chips.num_calculations, "ExpectedChips")
 end
 
+SMODS.Atlas({
+    key = "modicon",
+    path = "modicon.png",
+    px = 128,
+    py = 128
+})
+
 exp_chips:save_config()
 
 exp_chips.config_tab = function()
