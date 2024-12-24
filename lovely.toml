@@ -1,5 +1,9 @@
 [manifest]
 version = "0.0.1 ~1"
+dump_lua = true
+priority = 20
+author = ["meow"]
+description = "displays expected chips for the selected hand"
 
 [[patches]]
 [patches.pattern]
@@ -7,8 +11,11 @@ target = "game.lua"
 pattern = "timer_checkpoint('debug', 'draw')"
 position = "before"
 payload = '''
-print(G.expected_chips)
 if G.expected_chips ~= -1 and G.expected_chips ~= nil and G.hand ~= nil and G.hand.highlighted ~= nil and #G.hand.highlighted > 0 then
+    local chips_text_indicator = "Expected Chips"
+    if SMODS ~= nil then  -- SMODS is running
+        chips_text_indicator = localize('actual_text')
+    end
     if G.expected_chips_font == nil then
         G.expected_chips_font = love.graphics.newFont("resources/fonts/m6x11plus.ttf", 40)
     end
@@ -17,9 +24,9 @@ if G.expected_chips ~= -1 and G.expected_chips ~= nil and G.hand ~= nil and G.ha
         for i=string.len(expected_chips_text) - 3,1,-3 do
             expected_chips_text = expected_chips_text:sub(1,i)..","..expected_chips_text:sub(i+1)
         end
-        expected_chips_text = "Expected Chips: "..expected_chips_text
+        expected_chips_text = chips_text_indicator..": "..expected_chips_text
     else
-        expected_chips_text = "Expected Chips: ???"
+        expected_chips_text = chips_text_indicator.."Expected Chips: ???"
     end
     local expected_chips_text = love.graphics.newText(G.expected_chips_font, {{255, 0, 255}, expected_chips_text})
     love.graphics.draw(expected_chips_text, 120, 20)
@@ -82,11 +89,21 @@ sources = [
 ]
 
 
+# we just patch to test_functions.lua since it feels like a file no one needs to pattern/regex patch to
 [[patches]]
 [patches.copy]
-target = "functions/state_events.lua"
+target = "functions/test_functions.lua"
 position = "append"
 sources = [
     "state_events_evaluate_play_expected_chips.lua"
+]
+
+
+[[patches]]
+[patches.copy]
+target = "functions/test_functions.lua"
+position = "append"
+sources = [
+    "common_events_eval_card_chips.lua"
 ]
 

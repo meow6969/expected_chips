@@ -80,7 +80,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
         local hand_text_set = false
         for i=1, #G.jokers.cards do
             --calculate the joker effects
-            local effects = eval_card(G.jokers.cards[i], {cardarea = G.jokers, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, before = true, chip_calculation = true})
+            local effects = eval_card_chips(G.jokers.cards[i], {cardarea = G.jokers, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, before = true, chip_calculation = true})
             if effects.jokers then
 --                 card_eval_status_text(G.jokers.cards[i], 'jokers', nil, percent, nil, effects.jokers)
                 percent = percent + percent_delta
@@ -119,7 +119,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
                 local reps = {1}
 
                 --From Red seal
-                local eval = eval_card(scoring_hand[i], {repetition_only = true,cardarea = G.play, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, repetition = true, chip_calculation = true})
+                local eval = eval_card_chips(scoring_hand[i], {repetition_only = true,cardarea = G.play, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, repetition = true, chip_calculation = true})
                 if next(eval) then
                     for h = 1, eval.seals.repetitions do
                         reps[#reps+1] = eval
@@ -128,7 +128,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
                 --From jokers
                 for j=1, #G.jokers.cards do
                     --calculate the joker effects
-                    local eval = eval_card(G.jokers.cards[j], {cardarea = G.play, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_card = scoring_hand[i], repetition = true, chip_calculation = true})
+                    local eval = eval_card_chips(G.jokers.cards[j], {cardarea = G.play, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_card = scoring_hand[i], repetition = true, chip_calculation = true})
                     if next(eval) and eval.jokers then
                         for h = 1, eval.jokers.repetitions do
                             reps[#reps+1] = eval
@@ -142,7 +142,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
 --                     end
 
                     --calculate the hand effects
-                    local effects = {eval_card(scoring_hand[i], {cardarea = G.play, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, poker_hand = text, chip_calculation = true})}
+                    local effects = {eval_card_chips(scoring_hand[i], {cardarea = G.play, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, poker_hand = text, chip_calculation = true})}
                     for k=1, #G.jokers.cards do
                         --calculate the joker individual card effects
                         local eval = G.jokers.cards[k]:calculate_joker_chips({cardarea = G.play, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_card = scoring_hand[i], individual = true, chip_calculation = true})
@@ -248,7 +248,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
                     end
 
                     --calculate the hand effects
-                    local effects = {eval_card(G.hand.cards[i], {cardarea = G.hand, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, chip_calculation = true})}
+                    local effects = {eval_card_chips(G.hand.cards[i], {cardarea = G.hand, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, chip_calculation = true})}
 
                     for k=1, #G.jokers.cards do
                         --calculate the joker individual card effects
@@ -263,7 +263,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
                         --Check for hand doubling
 
                         --From Red seal
-                        local eval = eval_card(G.hand.cards[i], {repetition_only = true,cardarea = G.hand, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, repetition = true, card_effects = effects, chip_calculation = true})
+                        local eval = eval_card_chips(G.hand.cards[i], {repetition_only = true,cardarea = G.hand, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, repetition = true, card_effects = effects, chip_calculation = true})
                         if next(eval) and (next(effects[1]) or #effects > 1) then
                             for h  = 1, eval.seals.repetitions do
                                 reps[#reps+1] = eval
@@ -273,7 +273,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
                         --From Joker
                         for j=1, #G.jokers.cards do
                             --calculate the joker effects
-                            local eval = eval_card(G.jokers.cards[j], {cardarea = G.hand, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_card = G.hand.cards[i], repetition = true, card_effects = effects, chip_calculation = true})
+                            local eval = eval_card_chips(G.jokers.cards[j], {cardarea = G.hand, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_card = G.hand.cards[i], repetition = true, card_effects = effects, chip_calculation = true})
                             if next(eval) then
                                 for h  = 1, eval.jokers.repetitions do
                                     reps[#reps+1] = eval
@@ -330,7 +330,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
         for i=1, #G.jokers.cards + #G.consumeables.cards do
             local _card = G.jokers.cards[i] or G.consumeables.cards[i - #G.jokers.cards]
             --calculate the joker edition effects
-            local edition_effects = eval_card(_card, {cardarea = G.jokers, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, edition = true, chip_calculation = true})
+            local edition_effects = eval_card_chips(_card, {cardarea = G.jokers, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, edition = true, chip_calculation = true})
             if edition_effects.jokers then
                 edition_effects.jokers.edition = true
                 if edition_effects.jokers.chip_mod then
@@ -355,7 +355,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
             end
 
             --calculate the joker effects
-            local effects = eval_card(_card, {cardarea = G.jokers, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, joker_main = true, chip_calculation = true})
+            local effects = eval_card_chips(_card, {cardarea = G.jokers, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, joker_main = true, chip_calculation = true})
 
             --Any Joker effects
             if effects.jokers then
@@ -425,7 +425,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
 --             end
 --         end
         for j=1, #G.jokers.cards do
-            eval_card(G.jokers.cards[j], {cardarea = G.jokers, remove_playing_cards = true, removed = cards_destroyed, chip_calculation = true})
+            eval_card_chips(G.jokers.cards[j], {cardarea = G.jokers, remove_playing_cards = true, removed = cards_destroyed, chip_calculation = true})
         end
 
 --         local glass_shattered = {}
@@ -470,7 +470,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
         for i=1, #G.jokers.cards do
 
             --calculate the joker effects
-            local effects = eval_card(G.jokers.cards[i], {cardarea = G.jokers, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, debuffed_hand = true, chip_calculation = true})
+            local effects = eval_card_chips(G.jokers.cards[i], {cardarea = G.jokers, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, debuffed_hand = true, chip_calculation = true})
 
             --Any Joker effects
             if effects.jokers then
@@ -520,7 +520,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
 
     for i=1, #G.jokers.cards do
         --calculate the joker after hand played effects
-        local effects = eval_card(G.jokers.cards[i], {cardarea = G.jokers, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true, chip_calculation = true})
+        local effects = eval_card_chips(G.jokers.cards[i], {cardarea = G.jokers, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true, chip_calculation = true})
         if effects.jokers then
 --             card_eval_status_text(G.jokers.cards[i], 'jokers', nil, percent, nil, effects.jokers)
             percent = percent + percent_delta
@@ -604,8 +604,14 @@ G.FUNCS.evaluate_play_expected_chips = function(e)
     for k,v in pairs(G.GAME.pseudorandom) do
         old_probabilities[k] = v
     end
+    local calculations = 10
+    if SMODS ~= nil then  -- SMODS is running
+        -- sendDebugMessage("Detected SMODS", "expected chips")
+        calculations = exp_chips.num_calculations
+    end
 
-    for i=1,10 do
+    -- love.filesystem.append("meow.txt", "nyaaa!!\n")
+    for i=1,calculations do
         expected_chip_value = G.FUNCS.evaluate_play_expected_chips_once()
         if expected_chip_value == -1 or expected_chip_value == -2 then
             return expected_chip_value
@@ -618,5 +624,5 @@ G.FUNCS.evaluate_play_expected_chips = function(e)
         G.GAME.pseudorandom[k] = v
     end
 
-    return math.ceil(expected_chips_values / 10)
+    return math.ceil(expected_chips_values / calculations)
 end
