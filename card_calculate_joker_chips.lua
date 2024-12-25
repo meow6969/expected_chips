@@ -637,8 +637,11 @@ function Card:calculate_joker_chips(context)
                             }
                         end
                     end
-                    if self.ability.name == 'Seltzer' and not context.blueprint and context.chip_calculation ~= true then
+                    if self.ability.name == 'Seltzer' and not context.blueprint then
                         if self.ability.extra - 1 <= 0 then
+                            if context.chip_calculation == true then
+                                return
+                            end
                             G.E_MANAGER:add_event(Event({
                                 func = function()
                                     play_sound('tarot1')
@@ -660,7 +663,9 @@ function Card:calculate_joker_chips(context)
                                 colour = G.C.FILTER
                             }
                         else
-                            self.ability.extra = self.ability.extra - 1
+                            if context.chip_calculation ~= true then
+                                self.ability.extra = self.ability.extra - 1
+                            end
                             return {
                                 message = self.ability.extra..'',
                                 colour = G.C.FILTER
@@ -1022,7 +1027,13 @@ function Card:calculate_joker_chips(context)
                                 mult_mod = self.ability.mult
                             }
                         end
-                        if self.ability.name == 'Spare Trousers' and self.ability.mult > 0 then
+                        if self.ability.name == 'Spare Trousers' and (self.ability.mult > 0 or (self.ability.mult == 0 and context.chip_calculation == true))  then
+                            if context.chip_calculation == true then
+                                return {
+                                    message = localize{type='variable',key='a_mult',vars={self.ability.mult + self.ability.extra}},
+                                    mult_mod = self.ability.mult + self.ability.extra
+                                }
+                            end
                             return {
                                 message = localize{type='variable',key='a_mult',vars={self.ability.mult}},
                                 mult_mod = self.ability.mult
