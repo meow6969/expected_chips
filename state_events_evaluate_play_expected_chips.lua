@@ -143,6 +143,7 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
 
                     --calculate the hand effects
                     local effects = {eval_card_chips(scoring_hand[i], {cardarea = G.play, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, poker_hand = text, chip_calculation = true})}
+--                     sendDebugMessage(inspect(effects[1]))
                     for k=1, #G.jokers.cards do
                         --calculate the joker individual card effects
                         local eval = G.jokers.cards[k]:calculate_joker_chips({cardarea = G.play, full_hand = G.hand.highlighted, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, other_card = scoring_hand[i], individual = true, chip_calculation = true})
@@ -202,6 +203,10 @@ G.FUNCS.evaluate_play_expected_chips_once = function(e)
 
                         --If x_mult added, do mult add event and mult the mult to the total
                         if effects[ii].x_mult then
+                            -- we calculate obelisk mult here caus like its really really weird brah idk
+                            sendDebugMessage(inspect(effects[ii]))
+                            sendDebugMessage("nya")
+
 --                             if effects[ii].card then juice_card(effects[ii].card) end
                             mult = mod_mult(mult*effects[ii].x_mult)
 --                             update_hand_text({delay = 0}, {mult = mult})
