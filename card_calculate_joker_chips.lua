@@ -541,30 +541,7 @@ function Card:calculate_joker_chips(context)
                             colour = G.C.MONEY
                         }
                     end
-                    if self.ability.name == 'DNA' and G.GAME.current_round.hands_played == 0 and context.chip_calculation ~= true then
-                        if #context.full_hand == 1 then
-                            G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                            local _card = copy_card(context.full_hand[1], nil, nil, G.playing_card)
-                            _card:add_to_deck()
-                            G.deck.config.card_limit = G.deck.config.card_limit + 1
-                            table.insert(G.playing_cards, _card)
-                            G.hand:emplace(_card)
-                            _card.states.visible = nil
-
-                            G.E_MANAGER:add_event(Event({
-                                func = function()
-                                    _card:start_materialize()
-                                    return true
-                                end
-                            }))
-                            return {
-                                message = localize('k_copied_ex'),
-                                colour = G.C.CHIPS,
-                                card = self,
-                                playing_cards_created = {true}
-                            }
-                        end
-                    end
+                    
                     if self.ability.name == 'Ride the Bus' and not context.blueprint and context.chip_calculation ~= true then
                         local faces = false
                         for i = 1, #context.scoring_hand do
